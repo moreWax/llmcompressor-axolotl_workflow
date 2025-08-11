@@ -1,4 +1,4 @@
-# This is the configuration file for accelerate to manage the 4 × RTX 3090 setup. You can generate this file using the accelerate CLI tool:
+# This is the configuration file for accelerate to manage the 4 × RTX 3090 setup. You can generate this file using the accelerate CLI tool.
 # to run:
 # accelerate config --config_file accelerate_4x3090.yaml
 
