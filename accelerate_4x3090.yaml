@@ -1,0 +1,50 @@
+# This is the configuration file for accelerate to manage the 4 × RTX 3090 setup. You can generate this file using the accelerate CLI tool:
+# to run:
+# accelerate config --config_file accelerate_4x3090.yaml
+
+base_model: ./gpt-oss-120b-w4a16-experts-4bit-2:4
+model_type: AutoModelForCausalLM
+tokenizer_type: AutoTokenizer
+
+datasets:
+  - path: ./axolotl_run_sp/alpaca_mini.jsonl
+    type: alpaca
+
+max_steps: 400
+micro_batch_size: 1
+gradient_accumulation_steps: 64
+learning_rate: 2e-5
+lr_scheduler: cosine
+warmup_steps: 50
+bf16: true
+output_dir: ./axolotl_run_sp/run
+save_steps: 100
+eval_steps: 100
+
+sequence_len: 16384
+flash_attention: true
+sequence_parallel_degree: 4
+heads_k_stride: 1
+ring_attn_func: varlen_llama3
+
+plugins:
+  - axolotl.integrations.llm_compressor.LLMCompressorPlugin
+llmcompressor:
+  recipe:
+    finetuning_stage:
+      finetuning_modifiers:
+        - MagnitudePruningModifier:
+            init_sparsity: 0.50
+            final_sparsity: 0.50
+            start: 0
+            end: -1
+            update_frequency: 0.05
+            targets:
+              - re:.*q_proj.weight
+              - re:.*k_proj.weight
+              - re:.*v_proj.weight
+              - re:.*o_proj.weight
+              - re:.*gate_proj.weight
+              - re:.*up_proj.weight
+              - re:.*down_proj.weight
+  save_compressed: true
