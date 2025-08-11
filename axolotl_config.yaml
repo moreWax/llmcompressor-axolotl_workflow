@@ -1,5 +1,3 @@
-
-
 base_model: ./gpt-oss-120b-w4a16-experts-4bit-2:4
 model_type: AutoModelForCausalLM
 tokenizer_type: AutoTokenizer
