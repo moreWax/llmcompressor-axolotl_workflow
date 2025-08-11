@@ -1,0 +1,13 @@
+compute_environment: LOCAL_MACHINE
+mixed_precision: bf16
+num_processes: 4
+distributed_type: FSDP
+fsdp_config:
+  mixed_precision: bf16
+  sharding_strategy: FULL_SHARD
+  backward_prefetch: AUTO
+  forward_prefetch: true
+  limit_all_gathers: true
+  use_orig_params: true
+  sync_module_states: true
+  activation_checkpointing: false
